@@ -1,0 +1,180 @@
+
+<nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item">
+      App Banco
+    </a>
+  </div>
+</nav>
+<div class="container">
+  <div class="content">
+    <h1 class="title is-1">Prestamos</h1>
+    <section class="info-tiles">
+      <div class="tile is-ancestor has-text-centered">
+          <div class="tile is-parent">
+              <article class="tile is-child box">
+                  <p class="title">{{accounts.length}}</p>
+                  <p class="subtitle">Cuentas de débito</p>
+              </article>
+          </div>
+          <div class="tile is-parent">
+              <article class="tile is-child box">
+                  <p class="title">{{loans.length}}</p>
+                  <p class="subtitle">Total de prestamos</p>
+              </article>
+          </div>
+          <div class="tile is-parent">
+              <article class="tile is-child box">
+                  <p class="title">{{ activeAccounts.length }}</p>
+                  <p class="subtitle">Cuentas activas</p>
+              </article>
+          </div>
+      </div>
+  </section>
+  <div class="columns">
+    <div class="column is-6">
+      <div class="card events-card">
+        <header class="card-header">
+            <p class="card-header-title">
+              Cuentas de débito
+            </p>
+        </header>
+        <div class="card-table">
+          <div class="content">
+            <table class="table is-fullwidth is-striped">
+              <tbody>
+                <tr *ngFor="let account of accounts; let indx = index;">
+                  <td># {{ account.client }}</td>
+                  <td>{{ account.amount | currency }}</td>
+                  <td>
+                    <span class="tag" ngClass="{{ account.status === 'Activa' ? 'is-success' : account.status === 'Bloqueada' ? 'is-danger' : 'is-light'  }}">
+                      {{ account.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="button is-light" *ngIf="account.status === 'Activa'" (click)="getLoans(indx)">Ver prestamos</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="card events-card">
+          <header class="card-header">
+              <p class="card-header-title">
+                  Resumen de prestamos
+              </p>
+          </header>
+          <div class="card-table">
+            <div class="content">
+              <table class="table is-fullwidth is-striped">
+                <tbody>
+                  <tr *ngFor="let loan of loanSelected; let i=index;">
+                    <td># {{ loan.id }}</td>
+                    <td>{{ loan.date | date: 'MMM d, y' }}</td>
+                    <td>{{ loan.amount | currency  }}</td>
+                    <td>
+                      <span class="tag" ngClass=" {{(loan.status === 'pendiente' ? 'is-warning' : 'is-success')}}">
+                        {{ loan.status }}
+                      </span>
+                    </td>
+                    <td>
+                      <button class="button" *ngIf="loan.status != 'pagado'" (click)="loansParams(i)" target>Saldar Pago</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal" ngClass="{{ modalControl ? 'is-active': '' }}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Pago de Prestamo</p>
+          <button class="button is-danger" (click)="dismiss()">Cancelar</button>
+        </header>
+        <section class="modal-card-body">
+          <div class="content has-text-left">
+            <p>
+              Saldo Disponible <strong> {{  toFixed(this.saldoDisponible) | currency }}</strong>
+            </p>
+          </div>
+          <form [formGroup]="paymentParams">
+            <div class="field-body">
+              <div class="field">
+                <label for="paymentDate">Fecha Actual</label>
+                <div class="control">
+                  <input class="input" type="date" formControlName="paymentDate" id="paymentDate" placeholder="Fecha Actual">
+                </div>
+              </div>
+              <div class="field">
+                <label for="interes">Tasa de Interés</label>
+                <div class="control">
+                  <input class="input" type="number" formControlName="interes" min="0" id="interes" placeholder="Tasa de Interés" >
+                </div>
+              </div>
+              <div class="field">
+                <label for="iva">Tasa de IVA</label>
+                <div class="control">
+                  <input class="input" type="number" formControlName="iva" id="iva" min="0" placeholder="Tasa de IVA" >
+                </div>
+              </div>
+              <div class="field">
+                <label for="comercialDay">Días Comerciales</label>
+                <div class="control">
+                  <input class="input" type="number" formControlName="comercialDay" min="0" id="comercialDay" placeholder="Dias del Año comercial" >
+                </div>
+              </div>
+            </div>
+          </form>
+          <br>
+          <div class="card events-card">
+            <header class="card-header">
+                <p class="card-header-title">
+                    Calculo de Pago
+                </p>
+                <a href="#" class="card-header-icon" aria-label="more options">
+                  <span class="icon">
+                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </a>
+            </header>
+            <div class="card-table">
+              <div class="content">
+                <table class="table is-fullwidth is-striped">
+                  <tbody>
+                    <tr>
+                      <td>Plazo</td><td>{{this.plazo}}</td>
+                    </tr>
+                    <tr>
+                      <td>Interés</td><td>{{toFixed(this.interes)  | currency }}</td>
+                    </tr>
+                    <tr>
+                      <td>IVA</td><td>{{toFixed(this.iva)  | currency }}</td>
+                    </tr>
+                    <tr>
+                      <td>Monto total a pagar</td><td>{{ toFixed(this.paymentWithInteres)  | currency  }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+              <div class="notification is-danger is-light" *ngIf="!this.disableBtn">
+                <strong>Saldo insuficiente</strong>, no puede realizar el pago.
+              </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-success" *ngIf="this.disableBtn" (click)="doPayment()">Pagar</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+</div>
+

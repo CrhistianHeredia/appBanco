@@ -1,0 +1,72 @@
+[
+  {
+    "client" : "00103228",
+    "id": 1,
+    "date": "2021-01-10",
+    "amount": 37500.00,
+    "status": "pendiente"
+  },
+  {
+    "client" : "00103228",
+    "id": 2,
+    "date": "2021-01-19",
+    "amount": 725.18,
+    "status": "pendiente"
+  },
+  {
+    "client" : "00103228",
+    "id": 3,
+    "date": "2021-01-31",
+    "amount": 1578.22,
+    "status": "pendiente"
+  },
+  {
+    "client" : "00103228",
+    "id": 4,
+    "date": "2021-02-04",
+    "amount": 2175.25,
+    "status": "pagado"
+  },
+  {
+    "client" : "70099925",
+    "id": 1,
+    "date": "2021-01-07",
+    "amount": 2175.25,
+    "status": "pagado"
+  },
+  {
+    "client" : "70099925",
+    "id": 2,
+    "date": "2021-01-13",
+    "amount": 499.00,
+    "status": "pagado"
+  },
+  {
+    "client" : "70099925",
+    "id": 3,
+    "date": "2021-01-24",
+    "amount": 5725.18,
+    "status": "70099925"
+  },
+  {
+    "client" : "70099925",
+    "id": 4,
+    "date": "2021-02-07",
+    "amount": 876.13,
+    "status": "pendiente"
+  },
+  {
+    "client" : "00298185",
+    "id": 1,
+    "date": "2021-02-04",
+    "amount": 545.55,
+    "status": "pendiente"
+  },
+  {
+    "client" : "15000125",
+    "id": 1,
+    "date": "2020-12-20",
+    "amount": 545.55,
+    "status": "pagado"
+  }
+]
